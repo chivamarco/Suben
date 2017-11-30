@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Suben</string>
+    <string name="title_activity_maps2">Map</string>
+    <string name="map_api_key">AIzaSyBcY6eTRecHs3qk-yT0kHLFMOLNouHAPdI</string>
+    <string name="hint_email">Correo Electrónico</string>
+    <string name="hint_password">Contraseña</string>
+    <string name="hint_name">Nombre</string>
+    <string name="btn_login">Acceder</string>
+    <string name="btn_register">Registrarse</string>
+    <string name="btn_link_to_register">Registrarse, es gratis!</string>
+    <string name="btn_link_to_login">Usuario ya registrado! Acceso.</string>
+    <string name="welcome">Bienvenido</string>
+    <string name="btn_logout">Cerrar Sesión</string>
+    <string name="name">Nombre</string>
+</resources>
