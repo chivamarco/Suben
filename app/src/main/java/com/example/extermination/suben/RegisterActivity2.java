@@ -127,7 +127,7 @@ public class RegisterActivity2 extends AppCompatActivity {
                         String uid = jObj.getString("uid");
 
                         JSONObject user = jObj.getJSONObject("user");
-                        int userid = user.getInt("userid");
+                        int userid = user.getInt("id");
                         String name = user.getString("name");
                         String email = user.getString("email");
                         String created_at = user
@@ -182,7 +182,9 @@ public class RegisterActivity2 extends AppCompatActivity {
         };
 
         // Adding request to request queue
+        //Log.e(tag_string_req,strReq.toString());
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
     }
 
     private void showDialog() {

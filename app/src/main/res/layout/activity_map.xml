@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Toca una ruta para programar una alarma" />
+                android:text="Ruta seleccionada:" />
         </LinearLayout>
 
         <LinearLayout
@@ -51,12 +51,35 @@
             android:orientation="horizontal"
             android:padding="12dp">
 
-
-            <ListView
-                android:id="@+id/lista_rutas"
+            <TextView
+                android:id="@+id/lnombreruta"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Ruta" />
+
+
+
+            <!--
+           <ListView
+               android:id="@+id/lista_rutas"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent" />-->
+       </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/ltiemporuta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="10min" />
         </LinearLayout>
 
-    </LinearLayout>
+
+   </LinearLayout>
 </android.widget.RelativeLayout>

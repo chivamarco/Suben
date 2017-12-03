@@ -83,7 +83,8 @@ public class AdapterRuta extends RecyclerView.Adapter<AdapterRuta.RutaViewHolder
                         //Toast.makeText(v.getContext(), "Clicked "+ clickedDataItem.getrIDruta(), Toast.LENGTH_SHORT).show();
                         final Intent i;
                         i = new Intent(mCtx, MapActivity.class);
-                        i.putExtra("dato", clickedDataItem.getrIDruta());
+                        i.putExtra("idRuta", clickedDataItem.getrIDruta());
+                        i.putExtra("nameRuta", clickedDataItem.getrName());
                         mCtx.startActivity(i);
                         //selr.setText("Seleción: "+clickedDataItem.getrIDruta());
                     }

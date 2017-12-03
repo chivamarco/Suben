@@ -1,12 +1,5 @@
 package com.example.extermination.suben;
 
-import android.location.Location;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
 import android.Manifest;
 import android.animation.ValueAnimator;
 import android.app.Dialog;
@@ -14,22 +7,16 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.animation.LinearInterpolator;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.extermination.suben.Helper.SessionManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -43,20 +30,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
-public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
+public class MapActivitySnd extends FragmentActivity implements OnMapReadyCallback,
         GoogleMap.OnInfoWindowClickListener,GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
-
-    private static final String URL_SUBRUTAS = "http://10.0.0.6/android_login_api/RutasApp/GetSubRutas.php";
-    List<SubRutas> listaSubRutas;
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
     private static final int REQUEST_LOCATION = 0;
@@ -83,10 +60,9 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         // Check if user is already logged in or not
         if (session.isLoggedIn()) {
             // User is already logged in.
-                Toast.makeText(getApplicationContext(), "Logged user id: "+ String.valueOf(session.loggedUserID()) + " Sel route id: "+ String.valueOf(getIntent().getIntExtra("idRuta",0)), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Logged user id: "+ String.valueOf(session.loggedUserID()) + " Sel route id: "+ String.valueOf(getIntent().getIntExtra("dato",0)), Toast.LENGTH_SHORT).show();
             //finish();
         }
-        listaSubRutas = new ArrayList<>();
 
         //Check If Google Services Is Available
         if (getServicesAvailable()) {
@@ -129,8 +105,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         }
         //Uncomment To Show Google Location Blue Pointer
         // mMap.setMyLocationEnabled(true);
-        int a = getIntent().getIntExtra("idRuta", 0);
-       // Toast.makeText(getApplicationContext(), String.valueOf(getIntent().getIntExtra("idRuta",0)), Toast.LENGTH_SHORT).show();
+        int a = getIntent().getIntExtra("dato", 0);
+       // Toast.makeText(getApplicationContext(), String.valueOf(getIntent().getIntExtra("dato",0)), Toast.LENGTH_SHORT).show();
     }
 
     Marker mk = null;
@@ -386,7 +362,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     private interface LatLngInterpolator {
         LatLng interpolate(float fraction, LatLng a, LatLng b);
 
-        class LinearFixed implements LatLngInterpolator {
+        class LinearFixed implements MapActivitySnd.LatLngInterpolator {
             @Override
             public LatLng interpolate(float fraction, LatLng a, LatLng b) {
                 double lat = (b.latitude - a.latitude) * fraction + a.latitude;
@@ -399,88 +375,5 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 return new LatLng(lat, lng);
             }
         }
-    }
-    private void cargarSubRutas() {
-
-        /*
-        * Creating a String Request
-        * The request type is GET defined by first parameter
-        * The URL is defined in the second parameter
-        * Then we have a Response Listener and a Error Listener
-        * In response listener we will get the JSON response as a String
-        * */
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_SUBRUTAS,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            //converting the string to json array object
-                            JSONArray array = new JSONArray(response);
-                            Log.e("e", response);
-
-                            //traversing through all the object
-                            for (int i = 0; i < array.length(); i++) {
-
-
-                                //getting product object from json array
-                                JSONObject ruta = array.getJSONObject(i);
-                                if (ruta.getInt("IDRuta")==getIntent().getIntExtra("idRuta", 0)) {
-                                    //adding the product to product list
-                                    listaSubRutas.add(new SubRutas(
-                                            ruta.getInt("IDSubrutas"),
-                                            ruta.getInt("IDRuta"),
-                                            ruta.getDouble("orden"),
-                                            ruta.getDouble("lat"),
-                                            ruta.getDouble("lon")
-                                    ));
-
-                                }
-                            }
-
-                            //creating adapter object and setting it to recyclerview
-
-                            Log.e("e","did it");
-                            //AdapterRuta adapter = new AdapterRuta(SelectorRuta.this, listaRutas);
-                            //recyclerView.setAdapter(adapter);
-
-                            //Crear polilinea
-                            int tamano = listaSubRutas.size();
-                            Boolean ok = false;
-                            int i = 0;
-                            double a, b;
-                            SubRutas tmp = new SubRutas(0,0,0,0,0);
-                            while(!ok){
-                                if (i == tamano){
-                                    i = 0;
-                                }
-                                a = listaSubRutas.get(i).getRorden();
-                                b = listaSubRutas.get(i+1).getRorden();
-
-
-                                if (a > b){
-                                    tmp = listaSubRutas.get(i);
-                                    listaSubRutas.set(i, listaSubRutas.get(i+1));
-                                    listaSubRutas.set(i+1,tmp);
-                                }
-
-                                i++;
-                            }
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                });
-
-        //adding our stringrequest to queue
-        Volley.newRequestQueue(this).add(stringRequest);
     }
 }
