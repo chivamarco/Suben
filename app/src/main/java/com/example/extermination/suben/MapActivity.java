@@ -131,6 +131,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         // mMap.setMyLocationEnabled(true);
         int a = getIntent().getIntExtra("idRuta", 0);
        // Toast.makeText(getApplicationContext(), String.valueOf(getIntent().getIntExtra("idRuta",0)), Toast.LENGTH_SHORT).show();
+        cargarSubRutas();
     }
 
     Marker mk = null;
@@ -425,11 +426,11 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
                                 //getting product object from json array
                                 JSONObject ruta = array.getJSONObject(i);
-                                if (ruta.getInt("IDRuta")==getIntent().getIntExtra("idRuta", 0)) {
+                                if (ruta.getInt("IDruta")==getIntent().getIntExtra("idRuta", 0)) {
                                     //adding the product to product list
                                     listaSubRutas.add(new SubRutas(
                                             ruta.getInt("IDSubrutas"),
-                                            ruta.getInt("IDRuta"),
+                                            ruta.getInt("IDruta"),
                                             ruta.getDouble("orden"),
                                             ruta.getDouble("lat"),
                                             ruta.getDouble("lon")
@@ -448,23 +449,33 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                             int tamano = listaSubRutas.size();
                             Boolean ok = false;
                             int i = 0;
+                            int check = 0;
                             double a, b;
                             SubRutas tmp = new SubRutas(0,0,0,0,0);
                             while(!ok){
                                 if (i == tamano){
                                     i = 0;
+                                    check = 0;
                                 }
                                 a = listaSubRutas.get(i).getRorden();
                                 b = listaSubRutas.get(i+1).getRorden();
 
 
-                                if (a > b){
+                                if (a > b) {
+                                    Log.e("antes: ", "id: " + i + "tiene: " + listaSubRutas.get(i).getRorden() + " > " + listaSubRutas.get(i + 1).getRorden());
                                     tmp = listaSubRutas.get(i);
-                                    listaSubRutas.set(i, listaSubRutas.get(i+1));
-                                    listaSubRutas.set(i+1,tmp);
-                                }
+                                    listaSubRutas.set(i, listaSubRutas.get(i + 1));
+                                    listaSubRutas.set(i + 1, tmp);
+                                    Log.e("ahora: ", "id: " + i + "tiene: " + listaSubRutas.get(i).getRorden() + " > " + listaSubRutas.get(i + 1).getRorden());
+                                }else{
+                                    check++;
+                                    }
+
 
                                 i++;
+                                if (check >= 4){
+                                    ok=true;
+                                }
                             }
 
 
