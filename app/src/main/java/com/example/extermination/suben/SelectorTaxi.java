@@ -1,16 +1,12 @@
 package com.example.extermination.suben;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.support.v7.widget.LinearLayoutManager;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -26,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class SelectorRuta extends AppCompatActivity{
+public class SelectorTaxi extends AppCompatActivity{
     private static final String URL_PRODUCTS = "http://10.0.0.6/android_login_api/RutasApp/GetRutas.php";
 
     List<Rutas> listaRutas;
@@ -37,7 +33,7 @@ public class SelectorRuta extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_selector_ruta);
+        setContentView(R.layout.activity_selector_taxi);
         TextView TVSel = (TextView)findViewById(R.id.rutasel);
         recyclerView = (RecyclerView) findViewById(R.id.recylcerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -87,7 +83,7 @@ public class SelectorRuta extends AppCompatActivity{
 
                             //creating adapter object and setting it to recyclerview
 
-                            AdapterRuta adapter = new AdapterRuta(SelectorRuta.this, listaRutas);
+                            AdapterTaxi adapter = new AdapterTaxi(SelectorTaxi.this, listaRutas);
                             recyclerView.setAdapter(adapter);
 
                         } catch (JSONException e) {

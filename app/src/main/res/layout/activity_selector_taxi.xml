@@ -29,7 +29,7 @@
                 android:layout_weight="1"
                 android:textSize="28dp"
 
-                android:text="Selecciona Rutas" />
+                android:text="Taxis seguros" />
         </LinearLayout>
 
         <LinearLayout
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="16dp"
-                android:text="Seleccione la ruta de transporte que desea seguir en el mapa en vivo." />
+                android:text="Selecciona uno de los taxistas seguros para solicitar sus servicios. Nuestros asociados pasan por un filtro de seguridad para evitar poner en riesgo tu integridad." />
 
         </LinearLayout>
 

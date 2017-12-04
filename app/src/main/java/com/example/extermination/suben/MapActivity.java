@@ -19,6 +19,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.animation.LinearInterpolator;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -40,8 +41,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -80,12 +84,15 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
         session = new SessionManager(getApplicationContext());
 
+
         // Check if user is already logged in or not
         if (session.isLoggedIn()) {
             // User is already logged in.
                 Toast.makeText(getApplicationContext(), "Logged user id: "+ String.valueOf(session.loggedUserID()) + " Sel route id: "+ String.valueOf(getIntent().getIntExtra("idRuta",0)), Toast.LENGTH_SHORT).show();
             //finish();
         }
+        TextView nomruta = (TextView)findViewById(R.id.lnombreruta);
+        nomruta.setText("Ruta: "+getIntent().getExtras().getString("nameRuta",""));
         listaSubRutas = new ArrayList<>();
 
         //Check If Google Services Is Available
@@ -427,7 +434,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                                 //getting product object from json array
                                 JSONObject ruta = array.getJSONObject(i);
                                 if (ruta.getInt("IDruta")==getIntent().getIntExtra("idRuta", 0)) {
-                                    //adding the product to product list
+                                    //agrega subruta a lista
                                     listaSubRutas.add(new SubRutas(
                                             ruta.getInt("IDSubrutas"),
                                             ruta.getInt("IDruta"),
@@ -441,42 +448,23 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
                             //creating adapter object and setting it to recyclerview
 
-                            Log.e("e","did it");
                             //AdapterRuta adapter = new AdapterRuta(SelectorRuta.this, listaRutas);
                             //recyclerView.setAdapter(adapter);
 
                             //Crear polilinea
-                            int tamano = listaSubRutas.size();
-                            Boolean ok = false;
-                            int i = 0;
-                            int check = 0;
-                            double a, b;
-                            SubRutas tmp = new SubRutas(0,0,0,0,0);
-                            while(!ok){
-                                if (i == tamano){
-                                    i = 0;
-                                    check = 0;
-                                }
-                                a = listaSubRutas.get(i).getRorden();
-                                b = listaSubRutas.get(i+1).getRorden();
-
-
-                                if (a > b) {
-                                    Log.e("antes: ", "id: " + i + "tiene: " + listaSubRutas.get(i).getRorden() + " > " + listaSubRutas.get(i + 1).getRorden());
-                                    tmp = listaSubRutas.get(i);
-                                    listaSubRutas.set(i, listaSubRutas.get(i + 1));
-                                    listaSubRutas.set(i + 1, tmp);
-                                    Log.e("ahora: ", "id: " + i + "tiene: " + listaSubRutas.get(i).getRorden() + " > " + listaSubRutas.get(i + 1).getRorden());
-                                }else{
-                                    check++;
-                                    }
-
-
-                                i++;
-                                if (check >= 4){
-                                    ok=true;
-                                }
+                            //Polyline linRuta = mMap.addPolyline(new PolylineOptions());
+                            ArrayList<LatLng> coordList = new ArrayList<LatLng>();
+                            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                            for (int  x =0; x<listaSubRutas.size()-1; x++ ){
+                                coordList.add(new LatLng(listaSubRutas.get(x).getRlat(), listaSubRutas.get(x).getRlon()));
+                                Log.e("Longitud: ", coordList.get(x).toString());
+                                builder.include(coordList.get(x));
                             }
+                            PolylineOptions polylineOptions = new PolylineOptions();
+                            polylineOptions.addAll(coordList);
+                            polylineOptions.width(10);
+                            mMap.addPolyline(polylineOptions);
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 17));
 
 
                         } catch (JSONException e) {
@@ -493,5 +481,38 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
         //adding our stringrequest to queue
         Volley.newRequestQueue(this).add(stringRequest);
+    }
+    private void ordenarSubrutas(){
+        int tamano = listaSubRutas.size();
+        Boolean ok = false;
+        int i = 0;
+        int check = 0;
+        double a, b;
+        SubRutas tmp = new SubRutas(0,0,0,0,0);
+        while(!ok){
+            if (i == tamano){
+                i = 0;
+                check = 0;
+            }
+            a = listaSubRutas.get(i).getRorden();
+            b = listaSubRutas.get(i+1).getRorden();
+
+
+            if (a > b) {
+                Log.e("antes: ", "id: " + i + "tiene: " + listaSubRutas.get(i).getRorden() + " > " + listaSubRutas.get(i + 1).getRorden());
+                tmp = listaSubRutas.get(i);
+                listaSubRutas.set(i, listaSubRutas.get(i + 1));
+                listaSubRutas.set(i + 1, tmp);
+                Log.e("ahora: ", "id: " + i + "tiene: " + listaSubRutas.get(i).getRorden() + " > " + listaSubRutas.get(i + 1).getRorden());
+            }else{
+                check++;
+            }
+
+
+            i++;
+            if (check >= 4){
+                ok=true;
+            }
+        }
     }
 }
