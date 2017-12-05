@@ -15,37 +15,36 @@ import java.util.List;
  */
 
 
-public class AdapterTaxi extends RecyclerView.Adapter<AdapterTaxi.RutaViewHolder>{
+public class AdapterTaxi extends RecyclerView.Adapter<AdapterTaxi.TaxisViewHolder>{
 
     public interface Callbacks {
         public void onButtonClicked(int idkey);
     }
 
     private Callbacks mCallbacks;
-
     private Context mCtx;
-    private List<Rutas> rutasList;
+    private List<Taxis> rutasList;
     public TextView selr;
     int idruta;
 
 
-    public AdapterTaxi(Context mCtx, List<Rutas> rutaList) {
+    public AdapterTaxi(Context mCtx, List<Taxis> rutaList) {
         this.mCtx = mCtx;
         this.rutasList = rutaList;
     }
 
     @Override
-    public RutaViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TaxisViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mCtx);
         View view = inflater.inflate(R.layout.taxis_list, null);
-        return new RutaViewHolder(view);
+        return new TaxisViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(RutaViewHolder holder, int position) {
-        Rutas sruta = rutasList.get(position);
+    public void onBindViewHolder(TaxisViewHolder holder, int position) {
+        Taxis sruta = rutasList.get(position);
 
-        holder.textViewTitle.setText(sruta.getrName());
+        holder.textViewTitle.setText(sruta.getrNombre());
 
 
     }
@@ -54,11 +53,11 @@ public class AdapterTaxi extends RecyclerView.Adapter<AdapterTaxi.RutaViewHolder
         return rutasList.size();
     }
 
-    class RutaViewHolder extends RecyclerView.ViewHolder {
+    class TaxisViewHolder extends RecyclerView.ViewHolder {
 
         TextView textViewTitle;
 
-        public RutaViewHolder(View itemView) {
+        public TaxisViewHolder(View itemView) {
             super(itemView);
 
             textViewTitle = itemView.findViewById(R.id.textViewTitle);
@@ -72,16 +71,16 @@ public class AdapterTaxi extends RecyclerView.Adapter<AdapterTaxi.RutaViewHolder
 
                     // check if item still exists
                     if (pos != RecyclerView.NO_POSITION){
-                        Rutas clickedDataItem = rutasList.get(pos);
+                       Taxis clickedDataItem = rutasList.get(pos);
                         if (mCallbacks != null) {
-                            mCallbacks.onButtonClicked(clickedDataItem.getrIDruta());
-                            idruta = clickedDataItem.getrIDruta();
+                            mCallbacks.onButtonClicked(clickedDataItem.getrIDtaxista());
+                            idruta = clickedDataItem.getrIDtaxista();
                         }
                         //Toast.makeText(v.getContext(), "Clicked "+ clickedDataItem.getrIDruta(), Toast.LENGTH_SHORT).show();
                         final Intent i;
                         i = new Intent(mCtx, MapActivity.class);
-                        i.putExtra("idRuta", clickedDataItem.getrIDruta());
-                        i.putExtra("nameRuta", clickedDataItem.getrName());
+                        i.putExtra("idRuta", clickedDataItem.getrIDtaxista());
+                        i.putExtra("nameRuta", clickedDataItem.getrNombre());
                         mCtx.startActivity(i);
                         //selr.setText("Seleción: "+clickedDataItem.getrIDruta());
                     }

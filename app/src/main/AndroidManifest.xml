@@ -40,6 +40,9 @@
             android:parentActivityName=".SelectorRuta"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".SelectorTaxi"
+            android:parentActivityName=".MapActivity" />
+        <activity
             android:name=".MapsActivity2"
             android:parentActivityName=".SelectorRuta"
             android:label="@string/title_activity_maps2" />

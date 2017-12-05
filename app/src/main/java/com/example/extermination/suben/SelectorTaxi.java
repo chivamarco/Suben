@@ -1,5 +1,6 @@
 package com.example.extermination.suben;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,9 +24,9 @@ import java.util.List;
 
 
 public class SelectorTaxi extends AppCompatActivity{
-    private static final String URL_PRODUCTS = "http://10.0.0.6/android_login_api/RutasApp/GetRutas.php";
+    private static final String URL_TAXIS = "http://10.0.0.6/android_login_api/RutasApp/GetTaxis.php";
 
-    List<Rutas> listaRutas;
+    List<Taxis> listaRutas;
     RecyclerView recyclerView;
     int idrsel;
 
@@ -56,7 +57,7 @@ public class SelectorTaxi extends AppCompatActivity{
         * In response listener we will get the JSON response as a String
         * */
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_PRODUCTS,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_TAXIS,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -72,9 +73,10 @@ public class SelectorTaxi extends AppCompatActivity{
                                 JSONObject ruta = array.getJSONObject(i);
 
                                 //adding the product to product list
-                                listaRutas.add(new Rutas(
-                                        ruta.getInt("IDruta"),
-                                        ruta.getString("Nombre"),
+                                listaRutas.add(new Taxis(
+                                        ruta.getInt("IDtaxista"),
+                                        ruta.getString("nombre"),
+                                        ruta.getString("telefono"),
                                         ruta.getInt("Activo")
 
 
@@ -101,10 +103,8 @@ public class SelectorTaxi extends AppCompatActivity{
         //adding our stringrequest to queue
         Volley.newRequestQueue(this).add(stringRequest);
     }
-    public void verMapAct(View v){
-        //Intent avanzaMap = new Intent(this, MapsActivity2.class);
-        //startActivity(avanzaMap);
-    }
+
+
 
 
 

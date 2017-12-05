@@ -1,5 +1,6 @@
 package com.example.extermination.suben;
 
+import android.content.Intent;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,7 +19,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -92,6 +95,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             //finish();
         }
         TextView nomruta = (TextView)findViewById(R.id.lnombreruta);
+        Button btntax = (Button)findViewById(R.id.btnverTaxis);
         nomruta.setText("Ruta: "+getIntent().getExtras().getString("nameRuta",""));
         listaSubRutas = new ArrayList<>();
 
@@ -462,7 +466,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                             }
                             PolylineOptions polylineOptions = new PolylineOptions();
                             polylineOptions.addAll(coordList);
-                            polylineOptions.width(10);
+                            polylineOptions.width(8);
                             mMap.addPolyline(polylineOptions);
                             mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 17));
 
@@ -482,6 +486,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         //adding our stringrequest to queue
         Volley.newRequestQueue(this).add(stringRequest);
     }
+
     private void ordenarSubrutas(){
         int tamano = listaSubRutas.size();
         Boolean ok = false;
@@ -514,5 +519,9 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 ok=true;
             }
         }
+    }
+    public void verLista(View view){
+        Intent taxislist = new Intent(this, SelectorTaxi.class);
+        startActivity(taxislist);
     }
 }

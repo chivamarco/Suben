@@ -43,11 +43,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Ruta seleccionada:" />
+
             <Button
                 android:id="@+id/btnverTaxis"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="verLista"
                 android:text="Taxis seguros" />
         </LinearLayout>
 
