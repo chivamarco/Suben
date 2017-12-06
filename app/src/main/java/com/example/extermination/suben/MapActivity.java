@@ -30,6 +30,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.extermination.suben.App.AppConfig;
+import com.example.extermination.suben.App.AppController;
 import com.example.extermination.suben.Helper.SessionManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -55,7 +57,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
@@ -64,7 +68,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
     private static final String URL_SUBRUTAS = "http://10.0.0.6/android_login_api/RutasApp/GetSubRutas.php";
     List<SubRutas> listaSubRutas;
-
+    private boolean esChofer;
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
     private static final int REQUEST_LOCATION = 0;
     private Location mLastLocation;
@@ -87,12 +91,18 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
         session = new SessionManager(getApplicationContext());
 
-
+        esChofer =false;
         // Check if user is already logged in or not
         if (session.isLoggedIn()) {
             // User is already logged in.
-                Toast.makeText(getApplicationContext(), "Logged user id: "+ String.valueOf(session.loggedUserID()) + " Sel route id: "+ String.valueOf(getIntent().getIntExtra("idRuta",0)), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Logged user id: "+ String.valueOf(session.loggedUserID()) + " Sel route id: "+ String.valueOf(getIntent().getIntExtra("idRuta",0)), Toast.LENGTH_SHORT).show();
             //finish();
+            if (String.valueOf(session.loggedUserID()).equals("2")){
+                esChofer=true;
+                //Toast.makeText(getApplicationContext(), "Es el mismo usuario: "+String.valueOf(session.loggedUserID()),
+                //        Toast.LENGTH_SHORT).show();
+            }
+
         }
         TextView nomruta = (TextView)findViewById(R.id.lnombreruta);
         Button btntax = (Button)findViewById(R.id.btnverTaxis);
@@ -104,7 +114,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             // Building the GoogleApi client
             buildGoogleApiClient();
             createLocationRequest();
-            Toast.makeText(this, "Google Service Is Available!!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Google Service Is Available!!", Toast.LENGTH_SHORT).show();
             //Toast.makeText(this, "The user: ",Toast.LENGTH_SHORT).show();
         }
 
@@ -136,7 +146,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            return;
+            //return;
         }
         //Uncomment To Show Google Location Blue Pointer
         // mMap.setMyLocationEnabled(true);
@@ -197,7 +207,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             Dialog dialog = api.getErrorDialog(this, isAvailable, 0);
             dialog.show();
         } else {
-            Toast.makeText(this, "Cannot Connect To Play Services", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Cannot Connect To Play Services", Toast.LENGTH_SHORT).show();
         }
         return false;
     }
@@ -260,7 +270,11 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 double latitude = mLastLocation.getLatitude();
                 double longitude = mLastLocation.getLongitude();
                 String loc = "" + latitude + " ," + longitude + " ";
-                Toast.makeText(this,loc, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this,loc, Toast.LENGTH_SHORT).show();
+                //test
+                //Toast.makeText(this,String.valueOf(latitude) + " "+ String.valueOf(longitude)+" "+String.valueOf(session.loggedUserID()), Toast.LENGTH_SHORT).show();
+                //StoreLoc(String.valueOf(latitude), String.valueOf(longitude), String.valueOf(session.loggedUserID()));
+                //StoreLoc("5", "4", "2");
 
                 //Add pointer to the map at location
                 addMarker(mMap,latitude,longitude);
@@ -268,8 +282,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
             } else {
 
-                Toast.makeText(this, "Couldn't get the location. Make sure location is enabled on the device",
-                        Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Couldn't get the location. Make sure location is enabled on the device",
+                //        Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -344,9 +358,11 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     public void onLocationChanged(Location location) {
         // Assign the new location
         mLastLocation = location;
+       // if (esChofer) {
+       //    Toast.makeText(getApplicationContext(), "Location changed!",
+        //           Toast.LENGTH_SHORT).show();
+        //}
 
-        Toast.makeText(getApplicationContext(), "Location changed!",
-                Toast.LENGTH_SHORT).show();
 
         // Displaying the new location on UI
         displayLocation();
@@ -523,5 +539,71 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     public void verLista(View view){
         Intent taxislist = new Intent(this, SelectorTaxi.class);
         startActivity(taxislist);
+    }
+
+    /**
+     * function to send Loc to MySQL
+     * */
+    /**
+     * function to verify login details in mysql db
+     * */
+    private void StoreLoc(final String lat, final String lon, final String id) {
+        // Tag used to cancel the request
+        String tag_string_req = "req_login";
+
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.LOC_SENDER, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Login Response: " + response.toString());
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+
+                    // Check for error node in json
+                    if (!error) {
+                        // user successfully logged in
+
+
+                    } else {
+                        // Error in login. Get the error message
+                        String errorMsg = jObj.getString("error_msg");
+                        Toast.makeText(getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Login Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("latitud", lat);
+                params.put("longitud", lon);
+                params.put("id", id);
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 }

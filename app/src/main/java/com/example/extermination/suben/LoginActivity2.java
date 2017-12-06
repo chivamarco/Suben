@@ -178,14 +178,6 @@ public class LoginActivity2 extends AppCompatActivity {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("email", email);
                 params.put("password", password);
-                //try {
-                //    params.put("email", URLEncoder.encode(email, "UTF-8"));
-               //     params.put("password", URLEncoder.encode(password, "UTF-8"));
-                //} catch (UnsupportedEncodingException e) {
-                //    e.printStackTrace();
-                //}
-
-
                 return params;
             }
 

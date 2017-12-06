@@ -102,6 +102,7 @@ public class SelectorRuta extends AppCompatActivity{
                     }
                 });
 
+        //Toast.makeText(this, stringRequest.toString(),Toast.LENGTH_SHORT).show();
         //adding our stringrequest to queue
         Volley.newRequestQueue(this).add(stringRequest);
     }

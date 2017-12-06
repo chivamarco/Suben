@@ -11,17 +11,6 @@
 
 
         <TextView
-            android:id="@+id/textViewTitlea"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:text=""
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-            android:textColor="#000000" />
-
-
-
-        <TextView
             android:id="@+id/textViewTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -35,6 +24,18 @@
             android:minHeight="?android:attr/listPreferredItemHeightSmall"
             android:background="?android:attr/selectableItemBackground"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewphone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewTitle"
+            android:layout_marginLeft="45dp"
+            android:layout_marginTop="0dp"
+            android:paddingTop="0dp"
+            android:text="899-950-5041"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="#000000" />
 
     </RelativeLayout>
 

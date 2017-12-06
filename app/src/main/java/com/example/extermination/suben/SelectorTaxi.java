@@ -35,7 +35,6 @@ public class SelectorTaxi extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selector_taxi);
-        TextView TVSel = (TextView)findViewById(R.id.rutasel);
         recyclerView = (RecyclerView) findViewById(R.id.recylcerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
@@ -72,7 +71,7 @@ public class SelectorTaxi extends AppCompatActivity{
                                 //getting product object from json array
                                 JSONObject ruta = array.getJSONObject(i);
 
-                                //adding the product to product list
+                                //taxista a vector
                                 listaRutas.add(new Taxis(
                                         ruta.getInt("IDtaxista"),
                                         ruta.getString("nombre"),

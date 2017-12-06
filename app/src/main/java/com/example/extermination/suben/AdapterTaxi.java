@@ -45,6 +45,7 @@ public class AdapterTaxi extends RecyclerView.Adapter<AdapterTaxi.TaxisViewHolde
         Taxis sruta = rutasList.get(position);
 
         holder.textViewTitle.setText(sruta.getrNombre());
+        holder.tel.setText(sruta.getTelefono());
 
 
     }
@@ -56,11 +57,14 @@ public class AdapterTaxi extends RecyclerView.Adapter<AdapterTaxi.TaxisViewHolde
     class TaxisViewHolder extends RecyclerView.ViewHolder {
 
         TextView textViewTitle;
+        TextView tel;
 
         public TaxisViewHolder(View itemView) {
             super(itemView);
 
             textViewTitle = itemView.findViewById(R.id.textViewTitle);
+            tel = itemView.findViewById(R.id.textViewphone);
+
             selr = itemView.findViewById(R.id.rutasel);
 
             itemView.setOnClickListener(new View.OnClickListener(){
@@ -77,11 +81,11 @@ public class AdapterTaxi extends RecyclerView.Adapter<AdapterTaxi.TaxisViewHolde
                             idruta = clickedDataItem.getrIDtaxista();
                         }
                         //Toast.makeText(v.getContext(), "Clicked "+ clickedDataItem.getrIDruta(), Toast.LENGTH_SHORT).show();
-                        final Intent i;
-                        i = new Intent(mCtx, MapActivity.class);
-                        i.putExtra("idRuta", clickedDataItem.getrIDtaxista());
-                        i.putExtra("nameRuta", clickedDataItem.getrNombre());
-                        mCtx.startActivity(i);
+                        //final Intent i;
+                        //i = new Intent(mCtx, MapActivity.class);
+                        //i.putExtra("idRuta", clickedDataItem.getrIDtaxista());
+                        //i.putExtra("nameRuta", clickedDataItem.getrNombre());
+                        //mCtx.startActivity(i);
                         //selr.setText("Seleción: "+clickedDataItem.getrIDruta());
                     }
                 }
